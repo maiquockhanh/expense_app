@@ -1,0 +1,11 @@
+id;date;merchant;amount;status;payment_method;ref_no;image;image_content_type
+1;2022-02-08;paradigms;12395;WAITING_FOR_APPROVAL;Tranfer;Pizza User;../fake-data/blob/hipster.png;image/png
+2;2022-02-08;Isle withdrawal maroon;43127;PAID;Tranfer;Small magnetic Ball;../fake-data/blob/hipster.png;image/png
+3;2022-02-08;instruction;79651;APROVED;Cash;neutral e-services architectures;../fake-data/blob/hipster.png;image/png
+4;2022-02-07;microchip;95338;APROVED;Cash;metrics unleash;../fake-data/blob/hipster.png;image/png
+5;2022-02-07;Czech Wyoming payment;70153;WAITING_FOR_APPROVAL;Cash;infomediaries Ergonomic Handmade;../fake-data/blob/hipster.png;image/png
+6;2022-02-07;green Books;56361;APROVED;Credit;Grocery Liaison Cambridgeshire;../fake-data/blob/hipster.png;image/png
+7;2022-02-07;Borders;90486;WAITING_TO_BE_PAID;Credit;transmit Fresh Architect;../fake-data/blob/hipster.png;image/png
+8;2022-02-08;pixel evolve;60786;PAID;Credit;Account exploit;../fake-data/blob/hipster.png;image/png
+9;2022-02-08;deliverables plum EXE;32416;APROVED;Tranfer;Market Technician protocol;../fake-data/blob/hipster.png;image/png
+10;2022-02-08;Rustic;68365;APROVED;Tranfer;seamless ADP;../fake-data/blob/hipster.png;image/png

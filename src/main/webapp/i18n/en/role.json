@@ -1,0 +1,10 @@
+{
+  "expenseApp": {
+    "Role": {
+      "null": "",
+      "Administrator": "Administrator",
+      "Approver": "Approver",
+      "Personal": "Personal"
+    }
+  }
+}

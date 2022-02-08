@@ -1,0 +1,10 @@
+{
+  "expenseApp": {
+    "Method": {
+      "null": "",
+      "Cash": "Cash",
+      "Credit": "Credit",
+      "Tranfer": "Tranfer"
+    }
+  }
+}

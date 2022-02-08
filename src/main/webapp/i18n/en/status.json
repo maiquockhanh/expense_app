@@ -1,0 +1,11 @@
+{
+  "expenseApp": {
+    "Status": {
+      "null": "",
+      "WAITING_FOR_APPROVAL": "WAITING_FOR_APPROVAL",
+      "APROVED": "APROVED",
+      "WAITING_TO_BE_PAID": "WAITING_TO_BE_PAID",
+      "PAID": "PAID"
+    }
+  }
+}

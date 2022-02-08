@@ -1,0 +1,87 @@
+
+entity ApplicationUser {
+    role Role
+}
+
+relationship OneToOne {
+  ApplicationUser{internalUser} to User
+}
+
+enum Role {
+	Administrator
+    Approver
+    Personal
+}
+
+entity Company {
+	name String
+    companyId String
+}
+
+entity Category {
+	name String
+}
+
+entity Subcategory{
+	name String
+}
+
+enum Status {
+	WAITING_FOR_APPROVAL
+    APROVED
+    WAITING_TO_BE_PAID
+    PAID
+}
+
+entity Expense {
+	date LocalDate
+    merchant String
+    amount Integer
+    status Status
+    paymentMethod Method
+    refNo String
+    image ImageBlob
+}
+
+enum Method {
+	Cash
+    Credit
+    Tranfer
+}
+
+relationship OneToMany {
+	Company to ApplicationUser 
+}
+
+relationship OneToMany {
+	Company to Category 
+}
+
+relationship OneToOne {
+	Expense to Category
+}
+
+relationship OneToMany {
+	Company to Expense
+}
+
+relationship OneToMany {
+ 	ApplicationUser to Expense 
+}
+
+relationship ManyToOne {
+	ApplicationUser{approver} to ApplicationUser
+}
+
+relationship OneToMany {
+	Category to Subcategory
+}
+
+
+
+
+
+
+
+
+

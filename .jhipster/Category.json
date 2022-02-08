@@ -1,0 +1,40 @@
+{
+  "applications": "*",
+  "changelogDate": "20220208110341",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "category",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "Category",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "subcategory",
+      "otherEntityRelationshipName": "category",
+      "relationshipName": "subcategory",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "expense",
+      "otherEntityRelationshipName": "category",
+      "ownerSide": false,
+      "relationshipName": "expense",
+      "relationshipType": "one-to-one"
+    },
+    {
+      "otherEntityName": "company",
+      "otherEntityRelationshipName": "category",
+      "relationshipName": "company",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "service": "no"
+}

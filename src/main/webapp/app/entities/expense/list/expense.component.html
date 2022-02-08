@@ -1,0 +1,113 @@
+<div>
+  <h2 id="page-heading" data-cy="ExpenseHeading">
+    <span jhiTranslate="expenseApp.expense.home.title">Expenses</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info mr-2" (click)="loadAll()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span jhiTranslate="expenseApp.expense.home.refreshListLabel">Refresh List</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-expense"
+        [routerLink]="['/expense/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="expenseApp.expense.home.createLabel"> Create a new Expense </span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="expenses?.length === 0">
+    <span jhiTranslate="expenseApp.expense.home.notFound">No expenses found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="expenses && expenses.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr>
+          <th scope="col"><span jhiTranslate="global.field.id">ID</span></th>
+          <th scope="col"><span jhiTranslate="expenseApp.expense.date">Date</span></th>
+          <th scope="col"><span jhiTranslate="expenseApp.expense.merchant">Merchant</span></th>
+          <th scope="col"><span jhiTranslate="expenseApp.expense.amount">Amount</span></th>
+          <th scope="col"><span jhiTranslate="expenseApp.expense.status">Status</span></th>
+          <th scope="col"><span jhiTranslate="expenseApp.expense.paymentMethod">Payment Method</span></th>
+          <th scope="col"><span jhiTranslate="expenseApp.expense.refNo">Ref No</span></th>
+          <th scope="col"><span jhiTranslate="expenseApp.expense.image">Image</span></th>
+          <th scope="col"><span jhiTranslate="expenseApp.expense.category">Category</span></th>
+          <th scope="col"><span jhiTranslate="expenseApp.expense.company">Company</span></th>
+          <th scope="col"><span jhiTranslate="expenseApp.expense.applicationUser">Application User</span></th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let expense of expenses; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/expense', expense.id, 'view']">{{ expense.id }}</a>
+          </td>
+          <td>{{ expense.date | formatMediumDate }}</td>
+          <td>{{ expense.merchant }}</td>
+          <td>{{ expense.amount }}</td>
+          <td jhiTranslate="{{ 'expenseApp.Status.' + expense.status }}">{{ expense.status }}</td>
+          <td jhiTranslate="{{ 'expenseApp.Method.' + expense.paymentMethod }}">{{ expense.paymentMethod }}</td>
+          <td>{{ expense.refNo }}</td>
+          <td>
+            <a *ngIf="expense.image" (click)="openFile(expense.image, expense.imageContentType)">
+              <img [src]="'data:' + expense.imageContentType + ';base64,' + expense.image" style="max-height: 30px" alt="expense image" />
+            </a>
+            <span *ngIf="expense.image">{{ expense.imageContentType }}, {{ byteSize(expense.image) }}</span>
+          </td>
+          <td>
+            <div *ngIf="expense.category">
+              <a [routerLink]="['/category', expense.category?.id, 'view']">{{ expense.category?.id }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="expense.company">
+              <a [routerLink]="['/company', expense.company?.id, 'view']">{{ expense.company?.id }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="expense.applicationUser">
+              <a [routerLink]="['/application-user', expense.applicationUser?.id, 'view']">{{ expense.applicationUser?.id }}</a>
+            </div>
+          </td>
+          <td class="text-right">
+            <div class="btn-group">
+              <button
+                type="submit"
+                [routerLink]="['/expense', expense.id, 'view']"
+                class="btn btn-info btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+              </button>
+
+              <button
+                type="submit"
+                [routerLink]="['/expense', expense.id, 'edit']"
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+              </button>
+
+              <button type="submit" (click)="delete(expense)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

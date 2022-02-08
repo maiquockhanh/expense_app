@@ -1,0 +1,25 @@
+{
+  "expenseApp": {
+    "subcategory": {
+      "home": {
+        "title": "Subcategories",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Subcategory",
+        "createOrEditLabel": "Create or edit a Subcategory",
+        "notFound": "No Subcategories found"
+      },
+      "created": "A new Subcategory is created with identifier {{ param }}",
+      "updated": "A Subcategory is updated with identifier {{ param }}",
+      "deleted": "A Subcategory is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Subcategory {{ id }}?"
+      },
+      "detail": {
+        "title": "Subcategory"
+      },
+      "id": "ID",
+      "name": "Name",
+      "category": "Category"
+    }
+  }
+}

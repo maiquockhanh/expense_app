@@ -1,0 +1,67 @@
+{
+  "applications": "*",
+  "changelogDate": "20220208110343",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "expense",
+  "fields": [
+    {
+      "fieldName": "date",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "merchant",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "amount",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "Status",
+      "fieldValues": "WAITING_FOR_APPROVAL,APROVED,WAITING_TO_BE_PAID,PAID"
+    },
+    {
+      "fieldName": "paymentMethod",
+      "fieldType": "Method",
+      "fieldValues": "Cash,Credit,Tranfer"
+    },
+    {
+      "fieldName": "refNo",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "image",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "image"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "Expense",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "category",
+      "otherEntityRelationshipName": "expense",
+      "ownerSide": true,
+      "relationshipName": "category",
+      "relationshipType": "one-to-one"
+    },
+    {
+      "otherEntityName": "company",
+      "otherEntityRelationshipName": "expense",
+      "relationshipName": "company",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "applicationUser",
+      "otherEntityRelationshipName": "expense",
+      "relationshipName": "applicationUser",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "service": "no"
+}

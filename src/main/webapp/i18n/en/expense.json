@@ -1,0 +1,33 @@
+{
+  "expenseApp": {
+    "expense": {
+      "home": {
+        "title": "Expenses",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Expense",
+        "createOrEditLabel": "Create or edit a Expense",
+        "notFound": "No Expenses found"
+      },
+      "created": "A new Expense is created with identifier {{ param }}",
+      "updated": "A Expense is updated with identifier {{ param }}",
+      "deleted": "A Expense is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Expense {{ id }}?"
+      },
+      "detail": {
+        "title": "Expense"
+      },
+      "id": "ID",
+      "date": "Date",
+      "merchant": "Merchant",
+      "amount": "Amount",
+      "status": "Status",
+      "paymentMethod": "Payment Method",
+      "refNo": "Ref No",
+      "image": "Image",
+      "category": "Category",
+      "company": "Company",
+      "applicationUser": "Application User"
+    }
+  }
+}
