@@ -1,5 +1,7 @@
 package com.mycompany.myapp.web.rest.vm;
 
+import com.mycompany.myapp.domain.Company;
+import com.mycompany.myapp.domain.enumeration.Role;
 import com.mycompany.myapp.service.dto.AdminUserDTO;
 import javax.validation.constraints.Size;
 
@@ -15,8 +17,19 @@ public class ManagedUserVM extends AdminUserDTO {
     @Size(min = PASSWORD_MIN_LENGTH, max = PASSWORD_MAX_LENGTH)
     private String password;
 
+    private Role role;
+    private Company company;
+
     public ManagedUserVM() {
         // Empty constructor needed for Jackson.
+    }
+
+    public Company getCompany() {
+        return company;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
     }
 
     public String getPassword() {
@@ -25,6 +38,14 @@ public class ManagedUserVM extends AdminUserDTO {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     // prettier-ignore

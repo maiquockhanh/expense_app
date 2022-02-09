@@ -1,10 +1,14 @@
 import { Component, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 
 import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from 'app/config/error.constants';
 import { RegisterService } from './register.service';
+import { CompanyService } from 'app/entities/company/service/company.service';
+import { map } from 'rxjs';
+import { ICompany } from 'app/entities/company/company.model';
+import { Role } from 'app/entities/enumerations/role.model';
 
 @Component({
   selector: 'jhi-register',
@@ -19,6 +23,8 @@ export class RegisterComponent implements AfterViewInit {
   errorEmailExists = false;
   errorUserExists = false;
   success = false;
+  companiesSharedCollection: ICompany[] = [];
+  rolesCollection: string[] = Object.keys(Role);
 
   registerForm = this.fb.group({
     login: [
@@ -33,9 +39,20 @@ export class RegisterComponent implements AfterViewInit {
     email: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(254), Validators.email]],
     password: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(50)]],
     confirmPassword: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(50)]],
+    company: [],
+    role: [],
   });
 
-  constructor(private translateService: TranslateService, private registerService: RegisterService, private fb: FormBuilder) {}
+  constructor(
+    private translateService: TranslateService,
+    private registerService: RegisterService,
+    private fb: FormBuilder,
+    private companyService: CompanyService
+  ) {}
+
+  ngOnInit(): void {
+    this.loadRelationshipsOptions();
+  }
 
   ngAfterViewInit(): void {
     if (this.login) {
@@ -56,9 +73,23 @@ export class RegisterComponent implements AfterViewInit {
       const login = this.registerForm.get(['login'])!.value;
       const email = this.registerForm.get(['email'])!.value;
       this.registerService
-        .save({ login, email, password, langKey: this.translateService.currentLang })
+        .save({
+          login,
+          email,
+          password,
+          langKey: this.translateService.currentLang,
+          company: this.registerForm.get('company')!.value,
+          role: this.registerForm.get(['role'])!.value,
+        })
         .subscribe({ next: () => (this.success = true), error: response => this.processError(response) });
     }
+  }
+
+  protected loadRelationshipsOptions(): void {
+    this.companyService
+      .query()
+      .pipe(map((res: HttpResponse<ICompany[]>) => res.body ?? []))
+      .subscribe((companies: ICompany[]) => (this.companiesSharedCollection = companies));
   }
 
   private processError(response: HttpErrorResponse): void {

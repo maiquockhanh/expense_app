@@ -212,6 +212,30 @@
           </div>
         </div>
 
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="expenseApp.applicationUser.company" for="field_company">Company</label>
+          <select class="form-control">
+            <option
+              [ngValue]="companyOption === registerForm.get('company')!.value ? registerForm.get('company')!.value : companyOption"
+              *ngFor="let companyOption of companiesSharedCollection"
+            >
+              {{ companyOption.name }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="expenseApp.applicationUser.role" for="field_role">Role</label>
+          <select class="form-control">
+            <option
+              [ngValue]="role === registerForm.get('role')!.value ? registerForm.get('role')!.value : role"
+              *ngFor="let role of rolesCollection"
+            >
+              {{ role }}
+            </option>
+          </select>
+        </div>
+
         <button
           type="submit"
           [disabled]="registerForm.invalid"

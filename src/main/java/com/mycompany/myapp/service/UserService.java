@@ -1,8 +1,12 @@
 package com.mycompany.myapp.service;
 
 import com.mycompany.myapp.config.Constants;
+import com.mycompany.myapp.domain.ApplicationUser;
 import com.mycompany.myapp.domain.Authority;
+import com.mycompany.myapp.domain.Company;
 import com.mycompany.myapp.domain.User;
+import com.mycompany.myapp.domain.enumeration.Role;
+import com.mycompany.myapp.repository.ApplicationUserRepository;
 import com.mycompany.myapp.repository.AuthorityRepository;
 import com.mycompany.myapp.repository.UserRepository;
 import com.mycompany.myapp.security.AuthoritiesConstants;
@@ -41,16 +45,20 @@ public class UserService {
 
     private final CacheManager cacheManager;
 
+    private final ApplicationUserRepository applicationUserRepository;
+
     public UserService(
         UserRepository userRepository,
         PasswordEncoder passwordEncoder,
         AuthorityRepository authorityRepository,
-        CacheManager cacheManager
+        CacheManager cacheManager,
+        ApplicationUserRepository applicationUserRepository
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;
         this.cacheManager = cacheManager;
+        this.applicationUserRepository = applicationUserRepository;
     }
 
     public Optional<User> activateRegistration(String key) {
@@ -93,7 +101,7 @@ public class UserService {
             });
     }
 
-    public User registerUser(AdminUserDTO userDTO, String password) {
+    public User registerUser(AdminUserDTO userDTO, String password, Role role) {
         userRepository
             .findOneByLogin(userDTO.getLogin().toLowerCase())
             .ifPresent(existingUser -> {
@@ -132,6 +140,16 @@ public class UserService {
         userRepository.save(newUser);
         this.clearUserCaches(newUser);
         log.debug("Created Information for User: {}", newUser);
+
+        //Create and save the ApplicationUser entity
+        ApplicationUser applicationUser = new ApplicationUser();
+        applicationUser.setId(newUser.getId());
+        applicationUser.setInternalUser(newUser);
+        applicationUser.setRole(role);
+
+        applicationUserRepository.save(applicationUser);
+        log.debug("Created Information for ApplicationUser: {}", applicationUser);
+
         return newUser;
     }
 
