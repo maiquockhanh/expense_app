@@ -79,6 +79,10 @@ export class NavbarComponent implements OnInit {
     this.isNavbarCollapsed = !this.isNavbarCollapsed;
   }
 
+  isCompanyAdmin(): boolean {
+    return this.applicationRole === Role.Administrator;
+  }
+
   private checkRole(): void {
     if (this.account?.id) {
       this.applicationUserService.find(this.account.id).subscribe(res => {
