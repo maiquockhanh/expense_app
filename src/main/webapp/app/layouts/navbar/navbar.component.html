@@ -4,6 +4,11 @@
     <span jhiTranslate="global.title" class="navbar-title">Expense</span>
     <span class="navbar-version">{{ version }}</span>
   </a>
+
+  <span *ngIf="this.applicationRole" class="badge badge-light">
+    {{ this.applicationRole }}
+  </span>
+
   <a
     class="navbar-toggler d-lg-none"
     href="javascript:void(0);"

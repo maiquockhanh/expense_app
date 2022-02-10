@@ -63,7 +63,12 @@ public class AccountResource {
             throw new InvalidPasswordException();
         }
 
-        User user = userService.registerUser(managedUserVM, managedUserVM.getPassword(), Role.Personal);
+        User user = userService.registerUser(
+            managedUserVM,
+            managedUserVM.getPassword(),
+            managedUserVM.getRole(),
+            managedUserVM.getCompany()
+        );
         mailService.sendActivationEmail(user);
     }
 

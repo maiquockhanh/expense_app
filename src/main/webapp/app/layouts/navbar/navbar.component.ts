@@ -10,6 +10,8 @@ import { AccountService } from 'app/core/auth/account.service';
 import { LoginService } from 'app/login/login.service';
 import { ProfileService } from 'app/layouts/profiles/profile.service';
 import { EntityNavbarItems } from 'app/entities/entity-navbar-items';
+import { Role } from 'app/entities/enumerations/role.model';
+import { ApplicationUserService } from 'app/entities/application-user/service/application-user.service';
 
 @Component({
   selector: 'jhi-navbar',
@@ -24,6 +26,7 @@ export class NavbarComponent implements OnInit {
   version = '';
   account: Account | null = null;
   entitiesNavbarItems: any[] = [];
+  applicationRole: Role | null = null;
 
   constructor(
     private loginService: LoginService,
@@ -31,6 +34,7 @@ export class NavbarComponent implements OnInit {
     private sessionStorageService: SessionStorageService,
     private accountService: AccountService,
     private profileService: ProfileService,
+    private applicationUserService: ApplicationUserService,
     private router: Router
   ) {
     if (VERSION) {
@@ -47,6 +51,7 @@ export class NavbarComponent implements OnInit {
 
     this.accountService.getAuthenticationState().subscribe(account => {
       this.account = account;
+      this.checkRole();
     });
   }
 
@@ -67,9 +72,20 @@ export class NavbarComponent implements OnInit {
     this.collapseNavbar();
     this.loginService.logout();
     this.router.navigate(['']);
+    this.applicationRole = null;
   }
 
   toggleNavbar(): void {
     this.isNavbarCollapsed = !this.isNavbarCollapsed;
+  }
+
+  private checkRole(): void {
+    if (this.account?.id) {
+      this.applicationUserService.find(this.account.id).subscribe(res => {
+        if (res.body?.role) {
+          this.applicationRole = res.body.role;
+        }
+      });
+    }
   }
 }

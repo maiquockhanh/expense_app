@@ -101,7 +101,7 @@ public class UserService {
             });
     }
 
-    public User registerUser(AdminUserDTO userDTO, String password, Role role) {
+    public User registerUser(AdminUserDTO userDTO, String password, Role role, Company company) {
         userRepository
             .findOneByLogin(userDTO.getLogin().toLowerCase())
             .ifPresent(existingUser -> {
@@ -146,6 +146,7 @@ public class UserService {
         applicationUser.setId(newUser.getId());
         applicationUser.setInternalUser(newUser);
         applicationUser.setRole(role);
+        applicationUser.setCompany(company);
 
         applicationUserRepository.save(applicationUser);
         log.debug("Created Information for ApplicationUser: {}", applicationUser);

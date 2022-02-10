@@ -6,6 +6,7 @@ import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { IApplicationUser, getApplicationUserIdentifier } from '../application-user.model';
+import { Role } from 'app/entities/enumerations/role.model';
 
 export type EntityResponseType = HttpResponse<IApplicationUser>;
 export type EntityArrayResponseType = HttpResponse<IApplicationUser[]>;
