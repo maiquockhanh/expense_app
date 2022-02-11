@@ -37,7 +37,7 @@ import { UserRouteAccessService } from 'app/core/auth/user-route-access.service'
         },
         {
           path: 'company-admin',
-          loadChildren: () => import('./company-admin/company-admin-routing.module').then(m => m.CompanyAdminRoutingModule),
+          loadChildren: () => import('./company-admin/company-admin.module').then(m => m.CompanyAdminModule),
         },
         navbarRoute,
         ...errorRoute,

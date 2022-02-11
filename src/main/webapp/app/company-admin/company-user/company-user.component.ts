@@ -35,7 +35,6 @@ export class CompanyUserComponent implements OnInit {
         next: (res: HttpResponse<IApplicationUser[]>) => {
           this.isLoading = false;
           this.applicationUsers = res.body ?? [];
-          console.warn(this.applicationUsers);
         },
         error: () => {
           this.isLoading = false;

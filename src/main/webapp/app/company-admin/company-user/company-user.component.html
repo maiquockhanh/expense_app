@@ -14,19 +14,12 @@
   </h2>
 
   <div>
-    <div>
-      <h1>{{ applicationUsers?.length }}</h1>
-      <ul *ngIf="applicationUsers.length > 0">
-        <li *ngFor="let a of [1, 2]">aaaaaa</li>
-      </ul>
-    </div>
-
-    <!-- <table >
+    <table class="table table-striped" aria-describedby="page-heading">
       <thead>
         <tr>
           <th scope="col"><span>ID</span></th>
+          <th scope="col"><span>Username</span></th>
           <th scope="col"><span>Role</span></th>
-          <th scope="col"><span>Internal User</span></th>
           <th scope="col"><span>Approver</span></th>
           <th scope="col"><span>Company</span></th>
           <th scope="col"></th>
@@ -37,9 +30,11 @@
           <td>
             {{ applicationUser.id }}
           </td>
-          <td>{{ applicationUser.role }}</td>
           <td>
-            {{ applicationUser.internalUser?.id }}
+            {{ applicationUser.internalUser?.login }}
+          </td>
+          <td>
+            {{ applicationUser.role }}
           </td>
           <td>
             {{ applicationUser.approver?.id }}
@@ -51,16 +46,6 @@
             <div class="btn-group">
               <button
                 type="submit"
-                [routerLink]="['/application-user', applicationUser.id, 'view']"
-                class="btn btn-info btn-sm"
-                data-cy="entityDetailsButton"
-              >
-                <fa-icon icon="eye"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
-              </button>
-
-              <button
-                type="submit"
                 [routerLink]="['/application-user', applicationUser.id, 'edit']"
                 class="btn btn-primary btn-sm"
                 data-cy="entityEditButton"
@@ -69,14 +54,14 @@
                 <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
               </button>
 
-              <button type="submit" (click)="delete(applicationUser)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+              <button type="submit" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
                 <fa-icon icon="times"></fa-icon>
                 <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
               </button>
             </div>
           </td>
         </tr>
-      </tbody> 
-    </table>-->
+      </tbody>
+    </table>
   </div>
 </div>
