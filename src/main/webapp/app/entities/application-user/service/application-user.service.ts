@@ -71,4 +71,8 @@ export class ApplicationUserService {
     }
     return applicationUserCollection;
   }
+
+  findByCompanyId(companyId: number): Observable<EntityArrayResponseType> {
+    return this.http.get<IApplicationUser[]>(`${this.resourceUrl}/company/${companyId}`, { observe: 'response' });
+  }
 }

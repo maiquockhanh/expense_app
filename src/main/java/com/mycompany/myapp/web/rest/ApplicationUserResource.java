@@ -1,6 +1,7 @@
 package com.mycompany.myapp.web.rest;
 
 import com.mycompany.myapp.domain.ApplicationUser;
+import com.mycompany.myapp.domain.Company;
 import com.mycompany.myapp.repository.ApplicationUserRepository;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
@@ -146,6 +147,23 @@ public class ApplicationUserResource {
     public List<ApplicationUser> getAllApplicationUsers() {
         log.debug("REST request to get all ApplicationUsers");
         return applicationUserRepository.findAll();
+    }
+
+    /**
+     * {@code GET  /application-users/:companyId} :
+     *      *
+     * @param companyId the id of the applicationUser to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the applicationUser, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/application-users/company/{companyId}")
+    public List<ApplicationUser> getApplicationUserByCompany(@PathVariable Long companyId) {
+        log.debug("REST request to get ApplicationUser with company : {}", companyId);
+        List<ApplicationUser> applicationUser = applicationUserRepository.findAllApplicationUsers(companyId);
+        return applicationUser;
+        // return StreamSupport
+        //         .stream(applicationUserRepository.findAll().spliterator(), false)
+        //         .filter(user -> user.getCompany().getId() == companyId)
+        //         .collect(Collectors.toList());
     }
 
     /**
