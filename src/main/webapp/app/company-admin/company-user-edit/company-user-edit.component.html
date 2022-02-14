@@ -1,0 +1,57 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-application-user-heading" data-cy="ApplicationUserCreateUpdateHeading">Edit User</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" jhiTranslate="global.field.id" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="expenseApp.applicationUser.role" for="field_role">Role</label>
+          <select class="form-control" name="role" formControlName="role" id="field_role" data-cy="role">
+            <option [ngValue]="null">{{ 'expenseApp.Role.null' | translate }}</option>
+            <option *ngFor="let role of roleValues" [value]="role">{{ 'expenseApp.Role.' + role | translate }}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="expenseApp.applicationUser.approver" for="field_approver">Approver</label>
+          <select class="form-control" id="field_approver" data-cy="approver" name="approver" formControlName="approver">
+            <option [ngValue]="null"></option>
+            <ng-container *ngFor="let applicationUserOption of applicationUsersSharedCollection; trackBy: trackApplicationUserById">
+              <option
+                [ngValue]="
+                  applicationUserOption.id === editForm.get('approver')!.value?.id ? editForm.get('approver')!.value : applicationUserOption
+                "
+                *ngIf="!isPersonal(applicationUserOption)"
+              >
+                {{ applicationUserOption.internalUser?.login }}
+              </option>
+            </ng-container>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

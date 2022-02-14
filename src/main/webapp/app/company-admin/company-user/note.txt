@@ -1,9 +1,9 @@
 - COMPANY ADMIN (as manager)
-    + Admin can see all users of company
+*   + Admin can see all users of company
     + Admin can see all expense of company
     + Admin can active/deactive for each user of company
-    + Admin can set role for user of company
-    + Admin can set a user is an apporver of another user
+*   + Admin can set role for user of company
+*   + Admin can set a user is an apporver of another user
     + Admin can create new categories
 
 - User of COMPANY

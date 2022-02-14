@@ -1,14 +1,10 @@
 <div>
   <h2 id="page-heading" data-cy="ApplicationUserHeading">
-    <span jhiTranslate="expenseApp.applicationUser.home.title">Application Users</span>
+    <span>{{ company?.name }}'s Users</span>
 
     <div class="d-flex justify-content-end">
       <button class="btn btn-info mr-2" (click)="loadAll()" [disabled]="isLoading">
         <span jhiTranslate="expenseApp.applicationUser.home.refreshListLabel">Refresh List</span>
-      </button>
-
-      <button id="jh-create-entity" data-cy="entityCreateButton" class="btn btn-primary jh-create-entity create-application-user">
-        <span jhiTranslate="expenseApp.applicationUser.home.createLabel"> Create a new Application User </span>
       </button>
     </div>
   </h2>
@@ -21,7 +17,6 @@
           <th scope="col"><span>Username</span></th>
           <th scope="col"><span>Role</span></th>
           <th scope="col"><span>Approver</span></th>
-          <th scope="col"><span>Company</span></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -37,26 +32,19 @@
             {{ applicationUser.role }}
           </td>
           <td>
-            {{ applicationUser.approver?.id }}
-          </td>
-          <td>
-            {{ applicationUser.company?.id }}
+            {{ approverLogins.get(applicationUser.id!) }}
           </td>
           <td class="text-right">
             <div class="btn-group">
               <button
+                *ngIf="!isAdmin(applicationUser)"
                 type="submit"
-                [routerLink]="['/application-user', applicationUser.id, 'edit']"
+                [routerLink]="['/company-admin/user', applicationUser.id, 'edit']"
                 class="btn btn-primary btn-sm"
                 data-cy="entityEditButton"
               >
                 <fa-icon icon="pencil-alt"></fa-icon>
                 <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
-              </button>
-
-              <button type="submit" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
-                <fa-icon icon="times"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
               </button>
             </div>
           </td>
