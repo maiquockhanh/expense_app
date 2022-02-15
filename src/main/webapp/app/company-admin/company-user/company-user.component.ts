@@ -7,6 +7,7 @@ import { ApplicationUserService } from 'app/entities/application-user/service/ap
 import { Company } from 'app/entities/company/company.model';
 import { Role } from 'app/entities/enumerations/role.model';
 import { Subject, takeUntil } from 'rxjs';
+import { DataService } from '../company-admin.data.service';
 
 @Component({
   selector: 'jhi-company-user',
@@ -18,64 +19,23 @@ export class CompanyUserComponent implements OnInit {
   account: Account | null = null;
   company: Company | null = null;
   isLoading = false;
-  private readonly destroy$ = new Subject<void>();
-  constructor(protected applicationUserService: ApplicationUserService, private accountService: AccountService) {}
+  constructor(protected applicationUserService: ApplicationUserService, private dataService: DataService) {}
 
   ngOnInit(): void {
-    this.accountService
-      .getAuthenticationState()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(account => {
-        this.account = account;
-        this.getCompany();
-      });
+    this.loadAll();
   }
 
   loadAll(): void {
-    if (this.company?.id) {
-      this.applicationUserService.findByCompanyId(this.company.id).subscribe({
-        next: (res: HttpResponse<IApplicationUser[]>) => {
-          this.isLoading = false;
-          this.applicationUsers = res.body ?? [];
-          this.setApproverLogins();
-        },
-        error: () => {
-          this.isLoading = false;
-        },
-      });
-    }
+    this.dataService.awaitGetUsers().subscribe(users => (this.applicationUsers = users));
+    this.dataService.awaitGetCompany().subscribe(company => (this.company = company));
+    this.approverLogins = this.dataService.approversLogins;
   }
 
   trackId(index: number, item: IApplicationUser): number {
     return item.id!;
   }
 
-  getLogin(id: number | undefined): string | undefined {
-    return this.applicationUsers.find(element => element.id === id)?.internalUser?.login;
-  }
-
-  setApproverLogins(): void {
-    console.warn(this.applicationUsers);
-    this.applicationUsers.forEach(element => {
-      const approverLogin = this.getLogin(element.approver?.id);
-      if (element.id && approverLogin) {
-        this.approverLogins.set(element.id, approverLogin);
-      }
-    });
-  }
-
   isAdmin(applicationUser: ApplicationUser): boolean {
     return applicationUser.role === Role.Administrator;
-  }
-
-  private getCompany(): void {
-    if (this.account?.id) {
-      this.applicationUserService.find(this.account.id).subscribe(res => {
-        if (res.body?.company?.id) {
-          this.company = res.body.company;
-          this.loadAll();
-        }
-      });
-    }
   }
 }

@@ -43,7 +43,6 @@ export class CompanyUserEditComponent implements OnInit {
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ applicationUser }) => {
-      console.warn(applicationUser);
       this.updateForm(applicationUser);
 
       this.loadRelationshipsOptions(applicationUser);

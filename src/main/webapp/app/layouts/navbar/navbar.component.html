@@ -256,7 +256,13 @@
           <li *ngSwitchCase="true">
             <a class="dropdown-item" routerLink="company-admin/user" routerLinkActive="active" (click)="collapseNavbar()">
               <fa-icon icon="user" [fixedWidth]="true"></fa-icon>
-              <span>Company Users</span>
+              <span>User</span>
+            </a>
+          </li>
+          <li *ngSwitchCase="true">
+            <a class="dropdown-item" routerLink="company-admin/expense" routerLinkActive="active" (click)="collapseNavbar()">
+              <fa-icon icon="user" [fixedWidth]="true"></fa-icon>
+              <span>Expense</span>
             </a>
           </li>
         </ul>

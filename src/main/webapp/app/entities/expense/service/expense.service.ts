@@ -27,9 +27,9 @@ export class ExpenseService {
   }
 
   update(expense: IExpense): Observable<EntityResponseType> {
-    const copy = this.convertDateFromClient(expense);
+    //const copy = this.convertDateFromClient(expense);
     return this.http
-      .put<IExpense>(`${this.resourceUrl}/${getExpenseIdentifier(expense) as number}`, copy, { observe: 'response' })
+      .put<IExpense>(`${this.resourceUrl}/${getExpenseIdentifier(expense) as number}`, expense, { observe: 'response' })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
@@ -72,6 +72,10 @@ export class ExpenseService {
       return [...expensesToAdd, ...expenseCollection];
     }
     return expenseCollection;
+  }
+
+  findByCompanyId(companyId: number): Observable<EntityArrayResponseType> {
+    return this.http.get<IExpense[]>(`${this.resourceUrl}/company/${companyId}`, { observe: 'response' });
   }
 
   protected convertDateFromClient(expense: IExpense): IExpense {

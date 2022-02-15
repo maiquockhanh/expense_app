@@ -4,6 +4,7 @@ import { UserRouteAccessService } from 'app/core/auth/user-route-access.service'
 import { ApplicationUserRoutingResolveService } from 'app/entities/application-user/route/application-user-routing-resolve.service';
 import { CompanyUserEditComponent } from './company-user-edit/company-user-edit.component';
 import { CompanyUserComponent } from './company-user/company-user.component';
+import { ExpenseComponent } from './expense/expense.component';
 
 const routes: Routes = [
   {
@@ -21,6 +22,11 @@ const routes: Routes = [
     resolve: {
       applicationUser: ApplicationUserRoutingResolveService,
     },
+  },
+  {
+    path: 'expense',
+    component: ExpenseComponent,
+    canActivate: [UserRouteAccessService],
   },
 ];
 

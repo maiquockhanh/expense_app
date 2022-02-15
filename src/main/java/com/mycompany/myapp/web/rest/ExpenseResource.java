@@ -168,6 +168,18 @@ public class ExpenseResource {
     }
 
     /**
+     * {@code GET  /expenses/company/{companyId}} : get all the expenses by company.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of expenses in body.
+     */
+    @GetMapping("/expenses/company/{companyId}")
+    public List<Expense> getExpensesByCompany(@PathVariable Long companyId) {
+        log.debug("REST request to get all Expenses", companyId);
+        List<Expense> expenses = expenseRepository.findAllExpenses(companyId);
+        return expenses;
+    }
+
+    /**
      * {@code GET  /expenses/:id} : get the "id" expense.
      *
      * @param id the id of the expense to retrieve.

@@ -28,7 +28,7 @@
                 [ngValue]="
                   applicationUserOption.id === editForm.get('approver')!.value?.id ? editForm.get('approver')!.value : applicationUserOption
                 "
-                *ngIf="!isPersonal(applicationUserOption)"
+                *ngIf="!isPersonal(applicationUserOption) && this.editForm.value.id !== applicationUserOption.internalUser?.id"
               >
                 {{ applicationUserOption.internalUser?.login }}
               </option>
