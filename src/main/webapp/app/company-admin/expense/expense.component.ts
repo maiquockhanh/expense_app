@@ -12,6 +12,8 @@ import { AccountService } from 'app/core/auth/account.service';
 import { ApplicationUserService } from 'app/entities/application-user/service/application-user.service';
 import { DataService } from '../company-admin.data.service';
 import { Status } from 'app/entities/enumerations/status.model';
+import { Role } from 'app/entities/enumerations/role.model';
+import { ApplicationUser } from 'app/entities/application-user/application-user.model';
 
 @Component({
   selector: 'jhi-expense',
@@ -22,6 +24,7 @@ export class ExpenseComponent implements OnInit {
   expenses?: IExpense[];
   account: Account | null = null;
   company: Company | null = null;
+  applicationUser: ApplicationUser | null = null;
   isLoading = false;
 
   constructor(
@@ -36,6 +39,7 @@ export class ExpenseComponent implements OnInit {
     this.dataService.fetchAll();
     this.dataService.awaitGetCompany().subscribe(company => (this.company = company));
     this.dataService.awaitGetExpense().subscribe(expenses => (this.expenses = expenses));
+    this.dataService.awaitGetThisUser().subscribe(user => (this.applicationUser = user));
     this.userLogins = this.dataService.userLogins;
   }
 
@@ -68,6 +72,20 @@ export class ExpenseComponent implements OnInit {
 
   isApproved(status: Status): boolean {
     return status === Status.APROVED;
+  }
+
+  isAdmin(): boolean {
+    if (this.applicationUser) {
+      return this.applicationUser.role === Role.Administrator;
+    }
+    return false;
+  }
+
+  isPersonal(): boolean {
+    if (this.applicationUser) {
+      return this.applicationUser.role === Role.Personal;
+    }
+    return false;
   }
 
   nextStatus(expense: IExpense): void {

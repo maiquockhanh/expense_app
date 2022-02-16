@@ -83,6 +83,14 @@ export class NavbarComponent implements OnInit {
     return this.applicationRole === Role.Administrator;
   }
 
+  isPersonal(): boolean {
+    return this.applicationRole === Role.Personal;
+  }
+
+  isApprover(): boolean {
+    return this.applicationRole === Role.Approver;
+  }
+
   private checkRole(): void {
     if (this.account?.id) {
       this.applicationUserService.find(this.account.id).subscribe(res => {

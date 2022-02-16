@@ -39,7 +39,7 @@
           <th scope="col"><span jhiTranslate="expenseApp.expense.refNo">Ref No</span></th>
           <th scope="col"><span jhiTranslate="expenseApp.expense.image">Image</span></th>
           <th scope="col"><span jhiTranslate="expenseApp.expense.category">Category</span></th>
-          <th scope="col"><span>User</span></th>
+          <th scope="col" *ngIf="!isPersonal()"><span>User</span></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -61,18 +61,22 @@
               <span> {{ expense.category?.name }} </span>
             </div>
           </td>
-          <td>
+          <td *ngIf="!isPersonal()">
             <div *ngIf="expense.applicationUser">
               <span>{{ userLogins.get(expense.applicationUser?.id!) }}</span>
             </div>
           </td>
-          <td *ngIf="expense.status">
+          <td *ngIf="expense.status && !isPersonal()">
             <button class="btn btn-danger btn-sm" *ngIf="!isApproved(expense.status)" (click)="nextStatus(expense)">
               Waiting for approval
             </button>
             <button class="btn btn-success btn-sm" *ngIf="isApproved(expense.status)">Approved</button>
           </td>
-          <td class="text-right">
+          <td *ngIf="expense.status && isPersonal()">
+            <span class="badge badge-danger" *ngIf="!isApproved(expense.status)"> Waiting for approval </span>
+            <span class="badge badge-success" *ngIf="isApproved(expense.status)">Approved</span>
+          </td>
+          <td class="text-right" *ngIf="!isPersonal()">
             <div class="btn-group">
               <button type="submit" [routerLink]="[expense.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
                 <fa-icon icon="pencil-alt"></fa-icon>

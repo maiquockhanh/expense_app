@@ -213,7 +213,7 @@
         </ul>
       </li>
 
-      <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" *ngIf="isCompanyAdmin()">
+      <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" *ngIf="isPersonal() || isApprover()">
         <a class="nav-link" routerLink="company-admin/expense" (click)="collapseNavbar()">
           <span>
             <fa-icon icon="home"></fa-icon>

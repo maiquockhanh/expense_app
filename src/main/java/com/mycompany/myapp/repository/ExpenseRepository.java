@@ -12,5 +12,11 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ExpenseRepository extends JpaRepository<Expense, Long> {
     @Query("SELECT e FROM Expense e WHERE e.company.id = ?1")
-    List<Expense> findAllExpenses(Long companyId);
+    List<Expense> findAllExpensesByCompany(Long companyId);
+
+    @Query("SELECT e FROM Expense e WHERE e.applicationUser.id = ?1")
+    List<Expense> findAllExpensesByUser(Long userId);
+
+    @Query("SELECT e FROM Expense e where e.applicationUser.id IN (SELECT u.id FROM ApplicationUser u WHERE u.approver.id = ?1)")
+    List<Expense> findAllExpensesByApprover(Long approverId);
 }

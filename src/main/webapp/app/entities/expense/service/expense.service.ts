@@ -78,6 +78,14 @@ export class ExpenseService {
     return this.http.get<IExpense[]>(`${this.resourceUrl}/company/${companyId}`, { observe: 'response' });
   }
 
+  findByUserId(userId: number): Observable<EntityArrayResponseType> {
+    return this.http.get<IExpense[]>(`${this.resourceUrl}/user/${userId}`, { observe: 'response' });
+  }
+
+  findByApproverId(approverId: number): Observable<EntityArrayResponseType> {
+    return this.http.get<IExpense[]>(`${this.resourceUrl}/approver/${approverId}`, { observe: 'response' });
+  }
+
   protected convertDateFromClient(expense: IExpense): IExpense {
     return Object.assign({}, expense, {
       date: expense.date?.isValid() ? expense.date.format(DATE_FORMAT) : undefined,

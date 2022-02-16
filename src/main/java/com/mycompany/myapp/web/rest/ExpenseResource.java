@@ -175,7 +175,31 @@ public class ExpenseResource {
     @GetMapping("/expenses/company/{companyId}")
     public List<Expense> getExpensesByCompany(@PathVariable Long companyId) {
         log.debug("REST request to get all Expenses", companyId);
-        List<Expense> expenses = expenseRepository.findAllExpenses(companyId);
+        List<Expense> expenses = expenseRepository.findAllExpensesByCompany(companyId);
+        return expenses;
+    }
+
+    /**
+     * {@code GET  /expenses/user/{userId}} : get all the expenses by company.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of expenses in body.
+     */
+    @GetMapping("/expenses/user/{userId}")
+    public List<Expense> getExpensesByUser(@PathVariable Long userId) {
+        log.debug("REST request to get all Expenses", userId);
+        List<Expense> expenses = expenseRepository.findAllExpensesByUser(userId);
+        return expenses;
+    }
+
+    /**
+     * {@code GET  /expenses/approver/{approverId}} : get all the expenses by company.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of expenses in body.
+     */
+    @GetMapping("/expenses/approver/{approverId}")
+    public List<Expense> getExpensesByApprover(@PathVariable Long approverId) {
+        log.debug("REST request to get all Expenses", approverId);
+        List<Expense> expenses = expenseRepository.findAllExpensesByApprover(approverId);
         return expenses;
     }
 
