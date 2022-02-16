@@ -6,9 +6,10 @@ import { SharedModule } from 'app/shared/shared.module';
 import { CompanyAdminRoutingModule } from './company-admin-routing.module';
 import { CompanyUserEditComponent } from './company-user-edit/company-user-edit.component';
 import { ExpenseComponent } from './expense/expense.component';
+import { UpdateExpenseComponent } from './update-expense/update-expense.component';
 
 @NgModule({
   imports: [CommonModule, SharedModule, CompanyAdminRoutingModule],
-  declarations: [CompanyUserComponent, CompanyUserEditComponent, ExpenseComponent],
+  declarations: [CompanyUserComponent, CompanyUserEditComponent, ExpenseComponent, UpdateExpenseComponent],
 })
 export class CompanyAdminModule {}

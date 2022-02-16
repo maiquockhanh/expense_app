@@ -18,10 +18,12 @@ export class DataService {
   private defaultCompany!: Company;
   private defaultUsers!: IApplicationUser[];
   private defaultExpenses!: IApplicationUser[];
+  private defaultApplicationUsers!: IApplicationUser;
   private accountResource = new BehaviorSubject(this.defaultAccount);
   private companyResource = new BehaviorSubject(this.defaultCompany);
   private usersResource = new BehaviorSubject(this.defaultUsers);
   private expensesResource = new BehaviorSubject(this.defaultExpenses);
+  private applicationUserResource = new BehaviorSubject(this.defaultApplicationUsers);
 
   private fetching!: boolean;
 
@@ -29,6 +31,7 @@ export class DataService {
   private company = this.companyResource.asObservable();
   private users = this.usersResource.asObservable();
   private expenses = this.expensesResource.asObservable();
+  private applicationUser = this.applicationUserResource.asObservable();
 
   constructor(
     private applicationUserService: ApplicationUserService,
@@ -57,6 +60,13 @@ export class DataService {
     return this.users;
   }
 
+  awaitGetThisUser(): Observable<IApplicationUser> {
+    if (!this.fetching) {
+      this.fetchAll();
+    }
+    return this.applicationUser;
+  }
+
   awaitGetExpense(): Observable<IExpense[]> {
     if (!this.fetching) {
       this.fetchAll();
@@ -83,6 +93,7 @@ export class DataService {
         if (res.body?.company?.id) {
           this.fetching = false;
           this.companyResource.next(res.body.company);
+          this.applicationUserResource.next(res.body);
           this.defaultCompany = res.body.company;
           this.fetchUser();
           this.fetchExpenses();

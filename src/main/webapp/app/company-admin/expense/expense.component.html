@@ -12,7 +12,7 @@
         id="jh-create-entity"
         data-cy="entityCreateButton"
         class="btn btn-primary jh-create-entity create-expense"
-        [routerLink]="['/expense/new']"
+        [routerLink]="['/company-admin/expense/new']"
       >
         <fa-icon icon="plus"></fa-icon>
         <span jhiTranslate="expenseApp.expense.home.createLabel"> Create a new Expense </span>
@@ -74,12 +74,7 @@
           </td>
           <td class="text-right">
             <div class="btn-group">
-              <button
-                type="submit"
-                [routerLink]="['/expense', expense.id, 'edit']"
-                class="btn btn-primary btn-sm"
-                data-cy="entityEditButton"
-              >
+              <button type="submit" [routerLink]="[expense.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
                 <fa-icon icon="pencil-alt"></fa-icon>
                 <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
               </button>
