@@ -4,6 +4,8 @@ import { Account } from 'app/core/auth/account.model';
 import { AccountService } from 'app/core/auth/account.service';
 import { IApplicationUser } from 'app/entities/application-user/application-user.model';
 import { ApplicationUserService } from 'app/entities/application-user/service/application-user.service';
+import { ICategory } from 'app/entities/category/category.model';
+import { CategoryService } from 'app/entities/category/service/category.service';
 import { Company } from 'app/entities/company/company.model';
 import { Role } from 'app/entities/enumerations/role.model';
 import { IExpense } from 'app/entities/expense/expense.model';
@@ -19,11 +21,13 @@ export class DataService {
   private defaultCompany!: Company;
   private defaultUsers!: IApplicationUser[];
   private defaultExpenses!: IApplicationUser[];
+  private defaultCategories!: ICategory[];
   private defaultApplicationUser!: IApplicationUser;
   private accountResource = new BehaviorSubject(this.defaultAccount);
   private companyResource = new BehaviorSubject(this.defaultCompany);
   private usersResource = new BehaviorSubject(this.defaultUsers);
   private expensesResource = new BehaviorSubject(this.defaultExpenses);
+  private categoriesResource = new BehaviorSubject(this.defaultCategories);
   private applicationUserResource = new BehaviorSubject(this.defaultApplicationUser);
 
   private fetching!: boolean;
@@ -32,12 +36,14 @@ export class DataService {
   private company = this.companyResource.asObservable();
   private users = this.usersResource.asObservable();
   private expenses = this.expensesResource.asObservable();
+  private categories = this.categoriesResource.asObservable();
   private applicationUser = this.applicationUserResource.asObservable();
 
   constructor(
     private applicationUserService: ApplicationUserService,
     private accountService: AccountService,
-    private expenseService: ExpenseService
+    private expenseService: ExpenseService,
+    private categoryService: CategoryService
   ) {}
 
   awaitGetAccount(): Observable<Account> {
@@ -75,6 +81,13 @@ export class DataService {
     return this.expenses;
   }
 
+  awaitGetCategories(): Observable<ICategory[]> {
+    if (!this.fetching) {
+      this.fetchAll();
+    }
+    return this.categories;
+  }
+
   fetchAll(): void {
     this.fetching = true;
     this.accountService.getAuthenticationState().subscribe(account => {
@@ -98,20 +111,25 @@ export class DataService {
           this.defaultCompany = res.body.company;
           this.defaultApplicationUser = res.body;
           this.fetchUser();
+          this.fetchCategory();
+          this.fetching = true;
           if (this.defaultApplicationUser.role === Role.Administrator) {
             this.company.subscribe(company => {
+              this.fetching = false;
               if (company.id) {
                 this.fetchExpenses(this.expenseService.findByCompanyId(company.id));
               }
             });
           } else if (this.defaultApplicationUser.role === Role.Personal) {
             this.account.subscribe(account => {
+              this.fetching = false;
               if (account.id) {
                 this.fetchExpenses(this.expenseService.findByUserId(account.id));
               }
             });
           } else if (this.defaultApplicationUser.role === Role.Approver) {
             this.applicationUser.subscribe(user => {
+              this.fetching = false;
               if (user.id) {
                 this.fetchExpenses(this.expenseService.findByApproverId(user.id));
               }
@@ -120,6 +138,24 @@ export class DataService {
         }
       });
     }
+  }
+
+  fetchCategory(): void {
+    this.fetching = true;
+    this.company.subscribe(company => {
+      if (company.id) {
+        this.categoryService.findByCompanyId(company.id).subscribe({
+          next: (res: HttpResponse<ICategory[]>) => {
+            this.fetching = false;
+            this.categoriesResource.next(res.body ?? []);
+            this.defaultCategories = res.body ?? [];
+          },
+          error: () => {
+            this.fetching = false;
+          },
+        });
+      }
+    });
   }
 
   fetchUser(): void {

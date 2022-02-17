@@ -1,13 +1,16 @@
 package com.mycompany.myapp.web.rest;
 
 import com.mycompany.myapp.domain.Category;
+import com.mycompany.myapp.domain.Subcategory;
 import com.mycompany.myapp.repository.CategoryRepository;
+import com.mycompany.myapp.repository.SubcategoryRepository;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
@@ -35,9 +38,11 @@ public class CategoryResource {
     private String applicationName;
 
     private final CategoryRepository categoryRepository;
+    private final SubcategoryRepository subcategoryRepository;
 
-    public CategoryResource(CategoryRepository categoryRepository) {
+    public CategoryResource(CategoryRepository categoryRepository, SubcategoryRepository subcategoryRepository) {
         this.categoryRepository = categoryRepository;
+        this.subcategoryRepository = subcategoryRepository;
     }
 
     /**
@@ -169,6 +174,23 @@ public class CategoryResource {
         log.debug("REST request to get Category : {}", id);
         Optional<Category> category = categoryRepository.findById(id);
         return ResponseUtil.wrapOrNotFound(category);
+    }
+
+    /**
+     * {@code GET  /categories/company/:companyId} : get the "id" category.
+     *
+     * @param id the id of the category to retrieve.
+     * @return the {@link List} with status {@code 200 (OK)} and with body the category, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/categories/company/{companyId}")
+    public List<Category> getCategoryByCompany(@PathVariable Long companyId) {
+        log.debug("REST request to get Category : {}", companyId);
+        List<Category> categories = categoryRepository.findAllCategoriesByCompany(companyId);
+        for (Category category : categories) {
+            Set<Subcategory> subs = subcategoryRepository.findSubByCategoryId(category.getId());
+            category.setSubcategories(subs);
+        }
+        return categories;
     }
 
     /**

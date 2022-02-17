@@ -7,6 +7,9 @@ import { CompanyUserEditComponent } from './company-user-edit/company-user-edit.
 import { CompanyUserComponent } from './company-user/company-user.component';
 import { UpdateExpenseComponent } from './update-expense/update-expense.component';
 import { ExpenseComponent } from './expense/expense.component';
+import { CategoryComponent } from './category/category.component';
+import { UpdateCategoryComponent } from './update-category/update-category.component';
+import { CategoryRoutingResolveService } from 'app/entities/category/route/category-routing-resolve.service';
 
 const routes: Routes = [
   {
@@ -38,6 +41,7 @@ const routes: Routes = [
     component: UpdateExpenseComponent,
     canActivate: [UserRouteAccessService],
     resolve: {
+      category: CategoryRoutingResolveService,
       expense: ExpenseRoutingResolveService,
     },
   },
@@ -46,6 +50,30 @@ const routes: Routes = [
     component: UpdateExpenseComponent,
     resolve: {
       expense: ExpenseRoutingResolveService,
+    },
+    canActivate: [UserRouteAccessService],
+  },
+  {
+    path: 'category',
+    component: CategoryComponent,
+    resolve: {
+      category: CategoryRoutingResolveService,
+    },
+    canActivate: [UserRouteAccessService],
+  },
+  {
+    path: 'category/new',
+    component: UpdateCategoryComponent,
+    canActivate: [UserRouteAccessService],
+    resolve: {
+      category: CategoryRoutingResolveService,
+    },
+  },
+  {
+    path: 'category/:id/edit',
+    component: UpdateCategoryComponent,
+    resolve: {
+      category: CategoryRoutingResolveService,
     },
     canActivate: [UserRouteAccessService],
   },

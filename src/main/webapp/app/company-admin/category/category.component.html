@@ -1,0 +1,66 @@
+<div>
+  <h2 id="page-heading" data-cy="CategoryHeading">
+    <span jhiTranslate="expenseApp.category.home.title">Categories</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info mr-2" (click)="loadAll()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span jhiTranslate="expenseApp.category.home.refreshListLabel">Refresh List</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-category"
+        [routerLink]="['/company-admin/category/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="expenseApp.category.home.createLabel"> Create a new Category </span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="categories?.length === 0">
+    <span jhiTranslate="expenseApp.category.home.notFound">No categories found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="categories && categories.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr>
+          <th scope="col"><span jhiTranslate="global.field.id">ID</span></th>
+          <th scope="col"><span jhiTranslate="expenseApp.category.name">Name</span></th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let category of categories; trackBy: trackId" data-cy="entityTable">
+          <tr>
+            <td>
+              <a [routerLink]="['/category', category.id, 'view']">{{ category.id }}</a>
+            </td>
+            <td>{{ category.name }}</td>
+
+            <td class="text-right">
+              <button type="submit" [routerLink]="['/company-admin/expense', category.id, 'edit']" class="btn btn-success">
+                <fa-icon icon="plus"></fa-icon>
+                <span>Create Expense</span>
+              </button>
+            </td>
+
+            <td class="text-right">
+              <button type="submit" [routerLink]="['/company-admin/category', category.id, 'edit']" class="btn btn-primary btn-sm">
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+              </button>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+</div>

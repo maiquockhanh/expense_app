@@ -62,8 +62,10 @@ export class UpdateExpenseComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe(({ expense }) => {
-      this.updateForm(expense);
+    this.activatedRoute.data.subscribe(res => {
+      console.warn(res);
+
+      this.updateForm(res.expense, res.category);
 
       this.loadRelationshipsOptions();
     });
@@ -140,7 +142,7 @@ export class UpdateExpenseComponent implements OnInit {
     this.isSaving = false;
   }
 
-  protected updateForm(expense: IExpense): void {
+  protected updateForm(expense: IExpense, category: ICategory): void {
     this.editForm.patchValue({
       id: expense.id,
       date: expense.date,
@@ -155,20 +157,10 @@ export class UpdateExpenseComponent implements OnInit {
       company: expense.company,
       applicationUser: expense.applicationUser,
     });
-
-    this.categoriesCollection = this.categoryService.addCategoryToCollectionIfMissing(this.categoriesCollection, expense.category);
   }
 
   protected loadRelationshipsOptions(): void {
-    this.categoryService
-      .query({ filter: 'expense-is-null' })
-      .pipe(map((res: HttpResponse<ICategory[]>) => res.body ?? []))
-      .pipe(
-        map((categories: ICategory[]) =>
-          this.categoryService.addCategoryToCollectionIfMissing(categories, this.editForm.get('category')!.value)
-        )
-      )
-      .subscribe((categories: ICategory[]) => (this.categoriesCollection = categories));
+    this.dataService.awaitGetCategories().subscribe(cats => (this.categoriesCollection = cats));
 
     this.dataService.awaitGetCompany().subscribe(company => (this.company = company));
 

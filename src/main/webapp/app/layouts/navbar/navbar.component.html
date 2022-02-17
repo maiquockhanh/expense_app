@@ -210,14 +210,29 @@
               <span>Expense</span>
             </a>
           </li>
+          <li *ngSwitchCase="true">
+            <a class="dropdown-item" routerLink="company-admin/category" routerLinkActive="active" (click)="collapseNavbar()">
+              <fa-icon icon="user" [fixedWidth]="true"></fa-icon>
+              <span>Category</span>
+            </a>
+          </li>
         </ul>
       </li>
 
       <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" *ngIf="isPersonal() || isApprover()">
         <a class="nav-link" routerLink="company-admin/expense" (click)="collapseNavbar()">
           <span>
-            <fa-icon icon="home"></fa-icon>
+            <fa-icon icon="asterisk"></fa-icon>
             <span>Expense</span>
+          </span>
+        </a>
+      </li>
+
+      <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" *ngIf="isPersonal() || isApprover()">
+        <a class="nav-link" routerLink="company-admin/category" (click)="collapseNavbar()">
+          <span>
+            <fa-icon icon="asterisk"></fa-icon>
+            <span>Category</span>
           </span>
         </a>
       </li>

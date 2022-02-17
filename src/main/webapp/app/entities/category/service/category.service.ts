@@ -59,4 +59,8 @@ export class CategoryService {
     }
     return categoryCollection;
   }
+
+  findByCompanyId(companyId: number): Observable<EntityArrayResponseType> {
+    return this.http.get<ICategory[]>(`${this.resourceUrl}/company/${companyId}`, { observe: 'response' });
+  }
 }
