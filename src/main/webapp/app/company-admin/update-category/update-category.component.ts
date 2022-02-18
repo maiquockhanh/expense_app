@@ -38,7 +38,6 @@ export class UpdateCategoryComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ category }) => {
       this.updateForm(category);
-
       this.loadRelationshipsOptions();
     });
   }
@@ -95,11 +94,13 @@ export class UpdateCategoryComponent implements OnInit {
   }
 
   protected updateForm(category: ICategory): void {
-    this.editForm.patchValue({
-      id: category.id,
-      name: category.name,
-      company: this.company,
-    });
+    this.dataService.awaitGetCompany().subscribe(companyRes =>
+      this.editForm.patchValue({
+        id: category.id,
+        name: category.name,
+        company: companyRes,
+      })
+    );
   }
 
   protected loadRelationshipsOptions(): void {

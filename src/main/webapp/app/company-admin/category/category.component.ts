@@ -25,9 +25,6 @@ export class CategoryComponent implements OnInit {
         if (cats) {
           this.categories = cats;
           this.isLoading = false;
-          cats.forEach(item => {
-            this.status?.set(item.id!, false);
-          });
         }
       },
     });
