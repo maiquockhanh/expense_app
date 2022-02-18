@@ -135,7 +135,20 @@ public class UserService {
         // new user gets registration key
         newUser.setActivationKey(RandomUtil.generateActivationKey());
         Set<Authority> authorities = new HashSet<>();
-        authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
+
+        switch (role) {
+            case Administrator:
+                authorityRepository.findById(AuthoritiesConstants.ADMIN_COMP).ifPresent(authorities::add);
+                break;
+            case Approver:
+                authorityRepository.findById(AuthoritiesConstants.APPROVER).ifPresent(authorities::add);
+                break;
+            case Personal:
+                authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
+                break;
+            default:
+        }
+
         newUser.setAuthorities(authorities);
         userRepository.save(newUser);
         this.clearUserCaches(newUser);
