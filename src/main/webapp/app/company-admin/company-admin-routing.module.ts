@@ -10,7 +10,6 @@ import { ExpenseComponent } from './expense/expense.component';
 import { CategoryComponent } from './category/category.component';
 import { UpdateCategoryComponent } from './update-category/update-category.component';
 import { CategoryRoutingResolveService } from 'app/entities/category/route/category-routing-resolve.service';
-import { AdminRouteAccessService } from 'app/core/auth/application-route-access/admin-access.service';
 import { Authority } from 'app/config/authority.constants';
 
 const routes: Routes = [

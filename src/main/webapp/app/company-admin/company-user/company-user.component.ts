@@ -1,5 +1,6 @@
 import { HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { UserManagementService } from 'app/admin/user-management/service/user-management.service';
 import { Account } from 'app/core/auth/account.model';
 import { AccountService } from 'app/core/auth/account.service';
 import { ApplicationUser, IApplicationUser } from 'app/entities/application-user/application-user.model';
@@ -19,7 +20,11 @@ export class CompanyUserComponent implements OnInit {
   account: Account | null = null;
   company: Company | null = null;
   isLoading = false;
-  constructor(protected applicationUserService: ApplicationUserService, private dataService: DataService) {}
+  constructor(
+    protected applicationUserService: ApplicationUserService,
+    private dataService: DataService,
+    protected userService: UserManagementService
+  ) {}
 
   ngOnInit(): void {
     this.loadAll();
@@ -29,6 +34,11 @@ export class CompanyUserComponent implements OnInit {
     this.dataService.awaitGetUsers().subscribe(users => (this.applicationUsers = users));
     this.dataService.awaitGetCompany().subscribe(company => (this.company = company));
     this.approverLogins = this.dataService.approversLogins;
+  }
+
+  activateUser(user: IApplicationUser): void {
+    console.warn(user.internalUser);
+    this.userService.update({ ...user.internalUser, activated: true }).subscribe(() => this.loadAll());
   }
 
   trackId(index: number, item: IApplicationUser): number {

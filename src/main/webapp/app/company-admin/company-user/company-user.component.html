@@ -34,6 +34,12 @@
           <td>
             {{ approverLogins.get(applicationUser.id!) }}
           </td>
+          <td>
+            <button class="btn btn-danger btn-sm" *ngIf="!applicationUser.internalUser?.activated" (click)="activateUser(applicationUser)">
+              Deactivated
+            </button>
+            <button class="btn btn-success btn-sm" *ngIf="applicationUser.internalUser?.activated">Activated</button>
+          </td>
           <td class="text-right">
             <div class="btn-group">
               <button
