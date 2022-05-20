@@ -20,9 +20,6 @@ const routes: Routes = [
     resolve: {
       applicationUser: ApplicationUserRoutingResolveService,
     },
-    data: {
-      authorities: [Authority.ADMIN_COMP],
-    },
   },
   {
     path: 'user/:id/edit',
@@ -30,9 +27,6 @@ const routes: Routes = [
     canActivate: [UserRouteAccessService],
     resolve: {
       applicationUser: ApplicationUserRoutingResolveService,
-    },
-    data: {
-      authorities: [Authority.ADMIN_COMP],
     },
   },
   {

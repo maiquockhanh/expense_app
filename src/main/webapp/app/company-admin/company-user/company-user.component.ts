@@ -37,7 +37,7 @@ export class CompanyUserComponent implements OnInit {
   }
 
   activateUser(user: IApplicationUser): void {
-    console.warn(user.internalUser);
+    // console.warn(user.internalUser);
     this.userService.update({ ...user.internalUser, activated: true }).subscribe(() => this.loadAll());
   }
 
