@@ -4,7 +4,7 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
-
+import { HttpClient } from '@angular/common/http';
 import { IExpense, Expense } from '../../entities/expense/expense.model';
 import { ExpenseService } from '../../entities/expense/service/expense.service';
 import { AlertError } from 'app/shared/alert/alert-error.model';
@@ -19,6 +19,7 @@ import { ApplicationUserService } from 'app/entities/application-user/service/ap
 import { Status } from 'app/entities/enumerations/status.model';
 import { Method } from 'app/entities/enumerations/method.model';
 import { DataService } from '../company-admin.data.service';
+import dayjs from 'dayjs';
 
 @Component({
   selector: 'jhi-update-expense',
@@ -58,14 +59,15 @@ export class UpdateExpenseComponent implements OnInit {
     protected elementRef: ElementRef,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder,
-    protected dataService: DataService
+    protected dataService: DataService,
+    protected http: HttpClient
   ) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(res => {
       console.warn(res);
 
-      this.updateForm(res.expense, res.category);
+      this.updateForm(res.expense);
 
       this.loadRelationshipsOptions();
     });
@@ -80,6 +82,31 @@ export class UpdateExpenseComponent implements OnInit {
   }
 
   setFileData(event: Event, field: string, isImage: boolean): void {
+    const file = (event.target as HTMLInputElement).files![0];
+    const formData: any = new FormData();
+    formData.append('file', file);
+
+    this.http.post('https://ocr.asprise.com/api/v1/receipt', formData).subscribe({
+      next: response => {
+        console.warn();
+        this.editForm.patchValue({
+          id: this.editForm.get(['id'])!.value,
+          date: Object.values(response)[9][0]['date'],
+          merchant: Object.values(response)[9][0]['merchant_name'],
+          amount: Object.values(response)[9][0]['total'],
+          status: this.editForm.get(['id'])!.value,
+          paymentMethod: Method.Cash,
+          refNo: Object.values(response)[9][0]['receipt_no'],
+          image: this.editForm.get(['id'])!.value,
+          imageContentType: this.editForm.get(['id'])!.value,
+          category: this.editForm.get(['id'])!.value,
+          company: this.editForm.get(['id'])!.value,
+          applicationUser: this.editForm.get(['id'])!.value,
+        });
+      },
+      error: error => console.warn('fail', error),
+    });
+
     this.dataUtils.loadFileToForm(event, this.editForm, field, isImage).subscribe({
       error: (err: FileLoadError) =>
         this.eventManager.broadcast(new EventWithContent<AlertError>('expenseApp.error', { ...err, key: 'error.file.' + err.key })),
@@ -142,7 +169,7 @@ export class UpdateExpenseComponent implements OnInit {
     this.isSaving = false;
   }
 
-  protected updateForm(expense: IExpense, category: ICategory): void {
+  protected updateForm(expense: IExpense): void {
     this.editForm.patchValue({
       id: expense.id,
       date: expense.date,

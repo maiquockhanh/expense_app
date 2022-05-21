@@ -17,11 +17,6 @@
         <fa-icon icon="plus"></fa-icon>
         <span jhiTranslate="expenseApp.category.home.createLabel"> Create a new Category </span>
       </button>
-
-      <button type="submit" [routerLink]="['/company-admin/expense/new']" class="btn btn-success">
-        <fa-icon icon="plus"></fa-icon>
-        <span>Create Expense</span>
-      </button>
     </div>
   </h2>
 
@@ -49,7 +44,6 @@
               <a [routerLink]="['/category', category.id, 'view']">{{ category.id }}</a>
             </td>
             <td>{{ category.name }}</td>
-
             <td class="text-right">
               <button type="submit" [routerLink]="['/company-admin/category', category.id, 'edit']" class="btn btn-primary btn-sm">
                 <fa-icon icon="pencil-alt"></fa-icon>

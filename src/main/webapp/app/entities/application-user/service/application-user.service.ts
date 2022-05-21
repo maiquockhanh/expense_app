@@ -7,6 +7,7 @@ import { ApplicationConfigService } from 'app/core/config/application-config.ser
 import { createRequestOption } from 'app/core/request/request-util';
 import { IApplicationUser, getApplicationUserIdentifier } from '../application-user.model';
 import { Role } from 'app/entities/enumerations/role.model';
+import { IUser } from 'app/entities/user/user.model';
 
 export type EntityResponseType = HttpResponse<IApplicationUser>;
 export type EntityArrayResponseType = HttpResponse<IApplicationUser[]>;
@@ -74,5 +75,9 @@ export class ApplicationUserService {
 
   findByCompanyId(companyId: number): Observable<EntityArrayResponseType> {
     return this.http.get<IApplicationUser[]>(`${this.resourceUrl}/company/${companyId}`, { observe: 'response' });
+  }
+
+  updateActivate(user: IUser): Observable<IUser> {
+    return this.http.put<IUser>(`${this.resourceUrl}/activate`, user);
   }
 }

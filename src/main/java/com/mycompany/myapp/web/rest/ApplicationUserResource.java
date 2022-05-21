@@ -2,20 +2,36 @@ package com.mycompany.myapp.web.rest;
 
 import com.mycompany.myapp.domain.ApplicationUser;
 import com.mycompany.myapp.domain.Company;
+import com.mycompany.myapp.domain.User;
 import com.mycompany.myapp.repository.ApplicationUserRepository;
+import com.mycompany.myapp.repository.UserRepository;
+import com.mycompany.myapp.service.UserService;
+import com.mycompany.myapp.service.dto.AdminUserDTO;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
+import com.mycompany.myapp.web.rest.errors.EmailAlreadyUsedException;
+import com.mycompany.myapp.web.rest.errors.LoginAlreadyUsedException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
+import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
 /**
@@ -34,9 +50,17 @@ public class ApplicationUserResource {
     private String applicationName;
 
     private final ApplicationUserRepository applicationUserRepository;
+    private final UserService userService;
+    private final UserRepository userRepository;
 
-    public ApplicationUserResource(ApplicationUserRepository applicationUserRepository) {
+    public ApplicationUserResource(
+        ApplicationUserRepository applicationUserRepository,
+        UserService userService,
+        UserRepository userRepository
+    ) {
         this.applicationUserRepository = applicationUserRepository;
+        this.userService = userService;
+        this.userRepository = userRepository;
     }
 
     /**
@@ -193,5 +217,24 @@ public class ApplicationUserResource {
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
+    }
+
+    @PutMapping("/application-users/activate")
+    public ResponseEntity<AdminUserDTO> updateUser(@Valid @RequestBody AdminUserDTO userDTO) {
+        log.debug("REST request to update User : {}", userDTO);
+        Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
+        if (existingUser.isPresent() && (!existingUser.get().getId().equals(userDTO.getId()))) {
+            throw new EmailAlreadyUsedException();
+        }
+        existingUser = userRepository.findOneByLogin(userDTO.getLogin().toLowerCase());
+        if (existingUser.isPresent() && (!existingUser.get().getId().equals(userDTO.getId()))) {
+            throw new LoginAlreadyUsedException();
+        }
+        Optional<AdminUserDTO> updatedUser = userService.updateUser(userDTO);
+
+        return ResponseUtil.wrapOrNotFound(
+            updatedUser,
+            HeaderUtil.createAlert(applicationName, "userManagement.updated", userDTO.getLogin())
+        );
     }
 }
